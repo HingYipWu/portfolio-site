@@ -3,35 +3,109 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hing Yip Wu — Portfolio</title>
+<title>Hing Yip Wu — Electrical Engineering Portfolio</title>
+<meta name="description" content="Portfolio of Hing Yip Wu, Electrical Engineering student at the University at Buffalo. Personal projects, experience, and skills.">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<header class="wrap">
-  <h1>Hing Yip Wu</h1>
-  <p class="sub">Electrical Engineering student, University at Buffalo — B.S. May 2027, M.S. May 2028</p>
-  <p>Semiconductor device characterization, RF/microwave circuits, and power electronics. Currently a Research Trainee in Dr. Singisetti's group (weekly mentored training in probing and IV characterization) and an Electrical Engineer Intern at Arora Engineers.</p>
-  <nav><a href="/admin.html">Admin login</a> · <a href="https://www.linkedin.com/in/hing-yip-wu-40b135279/">LinkedIn</a> · <a href="https://github.com/HingYipWu">GitHub</a></nav>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="/">HY<span>.</span></a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="admin-link" href="/admin.html">Admin</a>
+  </div>
 </header>
-<main class="wrap">
-  <h2>Projects</h2>
-  <p id="status">Loading projects…</p>
-  <div id="projects" class="grid"></div>
-  <section>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow">Electrical Engineering · University at Buffalo</p>
+      <h1>Hing Yip Wu</h1>
+      <p class="hero-sub">Semiconductor characterization, RF, and power electronics — building personal projects and learning by doing.</p>
+      <p class="hero-body">B.S. Electrical Engineering, May 2027 · M.S. Electrical Engineering, May 2028 · Honors College</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">View projects</a>
+        <a class="btn btn-secondary" href="https://www.linkedin.com/in/hing-yip-wu-40b135279/">LinkedIn</a>
+        <a class="btn btn-secondary" href="https://github.com/HingYipWu">GitHub</a>
+      </div>
+    </div>
+    <div class="hero-graphic" aria-hidden="true">
+      <svg viewBox="0 0 320 200" role="img">
+        <rect x="10" y="10" width="300" height="180" rx="16" fill="none" stroke="#38bdf8" stroke-opacity=".4"/>
+        <path d="M20 140 L70 140 L90 80 L120 160 L140 100 L170 100 L190 60 L220 140 L300 140" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="70" cy="140" r="6" fill="#f59e0b"/><circle cx="140" cy="100" r="6" fill="#f59e0b"/><circle cx="220" cy="140" r="6" fill="#f59e0b"/>
+        <path d="M20 40 H120 M20 60 H90" stroke="#94a3b8" stroke-width="2"/>
+        <rect x="150" y="30" width="60" height="24" rx="4" fill="none" stroke="#94a3b8"/>
+      </svg>
+      <p class="graphic-caption">IV · RF · Power</p>
+    </div>
+  </div>
+</section>
+
+<main>
+  <section id="projects" class="wrap section">
+    <h2>Projects</h2>
+    <p class="section-intro">Personal projects I upload myself. No filler — only work I've actually built.</p>
+    <p id="status">Loading projects…</p>
+    <div id="projects" class="grid"></div>
+  </section>
+
+  <section id="about" class="wrap section section-alt">
     <h2>About me</h2>
     <p>I'm an Electrical Engineering student at the University at Buffalo, exploring semiconductor characterization, RF, and power electronics. I'm still figuring out which direction I like most — this page is for the personal projects I actually build and upload myself.</p>
-    <h3>Education</h3>
-    <p>University at Buffalo — B.S. Electrical Engineering, May 2027; M.S. Electrical Engineering, May 2028. Honors College.</p>
-    <h3>Experience</h3>
-    <ul>
-      <li>Dr. Singisetti Research Group, Research Trainee, Sep 2026–present — weekly mentored training in semiconductor device characterization: probing generic samples for linearity/ohmic properties and testing FET IV curves.</li>
-      <li>Arora Engineers Inc., Electrical Engineer Intern, Jun 2026–present — electrical site plans, power distribution layouts, and EV charging stations for USPS facilities, in AutoCAD/Revit.</li>
-      <li>Wireless Network for Smart Systems Lab, Research Assistant, Jan 2025–May 2026 — under Dr. Filippo Malandra.</li>
-    </ul>
-    <h3>Skills &amp; coursework</h3>
-    <p>Semiconductor &amp; characterization, IV tools, network analyzers, impedance analyzers, Keysight ADS, S-parameter simulations, RF/microwave circuits, power electronics, electronic devices and circuits, applied electromagnetics, HDL digital design, embedded systems, AutoCAD, Revit, Bluebeam.</p>
+  </section>
+
+  <section id="experience" class="wrap section">
+    <h2>Experience</h2>
+    <div class="timeline">
+      <article>
+        <h3>Dr. Singisetti Research Group — Research Trainee</h3>
+        <p class="meta">Sep 2026 – present · University at Buffalo</p>
+        <p>Weekly mentored training in semiconductor device characterization: probing generic samples for linearity/ohmic properties and testing FET IV curves.</p>
+      </article>
+      <article>
+        <h3>Arora Engineers Inc. — Electrical Engineer Intern</h3>
+        <p class="meta">Jun 2026 – present</p>
+        <p>Electrical site plans, power distribution layouts, and EV charging stations for USPS facilities, in AutoCAD/Revit.</p>
+      </article>
+      <article>
+        <h3>Wireless Network for Smart Systems Lab — Research Assistant</h3>
+        <p class="meta">Jan 2025 – May 2026 · University at Buffalo</p>
+        <p>Research assistant work under Dr. Filippo Malandra.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="skills" class="wrap section section-alt">
+    <h2>Skills &amp; coursework</h2>
+    <div class="chips">
+      <span>Semiconductor characterization</span><span>IV tools</span><span>Network analyzers</span><span>Impedance analyzers</span><span>Keysight ADS</span><span>S-parameter simulations</span><span>RF / microwave circuits</span><span>Power electronics</span><span>Electronic devices &amp; circuits</span><span>Applied electromagnetics</span><span>HDL digital design</span><span>Embedded systems</span><span>AutoCAD</span><span>Revit</span><span>Bluebeam</span>
+    </div>
   </section>
 </main>
+
+<footer id="contact" class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <h2>Hing Yip Wu</h2>
+      <p>Electrical Engineering · University at Buffalo</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="https://www.linkedin.com/in/hing-yip-wu-40b135279/">LinkedIn</a>
+      <a href="https://github.com/HingYipWu">GitHub</a>
+      <a href="mailto:hingyipwu@gmail.com">hingyipwu@gmail.com</a>
+      <a href="/admin.html">Admin login</a>
+    </nav>
+    <p class="footer-note">© 2026 Hing Yip Wu · Portfolio projects are uploaded by the owner only.</p>
+  </div>
+</footer>
+
 <script>
 async function load() {
   const el = document.getElementById('projects');
@@ -40,7 +114,12 @@ async function load() {
     const r = await fetch('/api/projects');
     const data = await r.json();
     const list = data.projects || [];
-    status.textContent = list.length ? '' : 'No projects uploaded yet — check back soon.';
+    if (!list.length) {
+      status.textContent = '';
+      el.innerHTML = '<article class="card empty-card"><h3>No projects uploaded yet</h3><p>Check back soon — new personal projects will appear here as they are uploaded.</p></article>';
+      return;
+    }
+    status.textContent = '';
     el.innerHTML = list.map(p => `
       <article class="card">
         ${p.imageUrl ? `<img src="${p.imageUrl}" alt="">` : ''}
@@ -50,7 +129,7 @@ async function load() {
         ${p.link ? `<p><a href="${p.link}" target="_blank" rel="noopener">View project →</a></p>` : ''}
       </article>`).join('');
   } catch (e) {
-    status.textContent = 'Could not load projects. Seed projects are listed below in the API fallback.';
+    status.textContent = 'Could not load projects right now.';
   }
 }
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }

@@ -7,7 +7,14 @@
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<main class="wrap">
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="/">HY<span>.</span></a>
+    <nav class="main-nav" aria-label="Main"><a href="/#projects">Projects</a><a href="/#about">About</a><a href="/#contact">Contact</a></nav>
+    <a class="admin-link" href="/admin.html">Admin</a>
+  </div>
+</header>
+<main class="wrap section">
   <h1>Admin login</h1>
   <p>Only Hing Yip can upload. Visitors see the public portfolio at <a href="/">home</a> — they never see this upload form unless they know the admin password.</p>
   <p id="setup" style="display:none;color:#8a0000">Admin uploads are not set up yet: set the <code>ADMIN_PASSWORD</code> environment variable in Vercel (and link a Blob store) and redeploy. See README.md in the repo.</p>
@@ -67,5 +74,12 @@
     };
   </script>
 </main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div><h2>Hing Yip Wu</h2><p>Electrical Engineering · University at Buffalo</p></div>
+    <nav aria-label="Footer"><a href="https://www.linkedin.com/in/hing-yip-wu-40b135279/">LinkedIn</a><a href="https://github.com/HingYipWu">GitHub</a><a href="/">Home</a></nav>
+    <p class="footer-note">© 2026 Hing Yip Wu</p>
+  </div>
+</footer>
 </body>
 </html>
