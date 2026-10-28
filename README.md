@@ -10,8 +10,9 @@ The owner uploads from `/admin.html` with the admin password.
    Redeploy after adding it. Do not put the password in this repo.
 2. In Vercel, Storage → Create a Blob store and link it to this project, then redeploy.
    Uploads are stored as `projects.json` in Blob; images can be added via `imageUrl` for v1.
-3. Without those two steps, the public portfolio still works with the seed projects,
-   but `/admin.html` will show that admin is not configured yet.
+3. Without those two steps, the public portfolio still works, but shows
+   "No projects uploaded yet" (there are no seed projects, by design),
+   and `/admin.html` will show that admin is not configured yet.
 
 ## Local structure
 

@@ -18,9 +18,18 @@
   <p id="status">Loading projects…</p>
   <div id="projects" class="grid"></div>
   <section>
-    <h2>About</h2>
-    <p>Experience, in his own framing: Singisetti Research Group — testing/characterization training (generic semiconductor samples, FET IV curves, linearity/ohmic properties). Arora Engineers — electrical site plans, power distribution layouts, and EV charging stations for USPS facilities, in AutoCAD/Revit. Wireless Network for Smart Systems Lab (Jan 2025–May 2026) — research assistant work under Dr. Filippo Malandra.</p>
-    <p>Skills: semiconductor characterization, IV tools, network analyzers, impedance analyzers, Keysight ADS, S-parameter simulations, RF/microwave circuits, power electronics, AutoCAD, Revit, Bluebeam.</p>
+    <h2>About me</h2>
+    <p>I'm an Electrical Engineering student at the University at Buffalo, exploring semiconductor characterization, RF, and power electronics. I'm still figuring out which direction I like most — this page is for the personal projects I actually build and upload myself.</p>
+    <h3>Education</h3>
+    <p>University at Buffalo — B.S. Electrical Engineering, May 2027; M.S. Electrical Engineering, May 2028. Honors College.</p>
+    <h3>Experience</h3>
+    <ul>
+      <li>Dr. Singisetti Research Group, Research Trainee, Sep 2026–present — weekly mentored training in semiconductor device characterization: probing generic samples for linearity/ohmic properties and testing FET IV curves.</li>
+      <li>Arora Engineers Inc., Electrical Engineer Intern, Jun 2026–present — electrical site plans, power distribution layouts, and EV charging stations for USPS facilities, in AutoCAD/Revit.</li>
+      <li>Wireless Network for Smart Systems Lab, Research Assistant, Jan 2025–May 2026 — under Dr. Filippo Malandra.</li>
+    </ul>
+    <h3>Skills &amp; coursework</h3>
+    <p>Semiconductor &amp; characterization, IV tools, network analyzers, impedance analyzers, Keysight ADS, S-parameter simulations, RF/microwave circuits, power electronics, electronic devices and circuits, applied electromagnetics, HDL digital design, embedded systems, AutoCAD, Revit, Bluebeam.</p>
   </section>
 </main>
 <script>
@@ -31,7 +40,7 @@ async function load() {
     const r = await fetch('/api/projects');
     const data = await r.json();
     const list = data.projects || [];
-    status.textContent = list.length ? '' : 'No projects yet.';
+    status.textContent = list.length ? '' : 'No projects uploaded yet — check back soon.';
     el.innerHTML = list.map(p => `
       <article class="card">
         ${p.imageUrl ? `<img src="${p.imageUrl}" alt="">` : ''}

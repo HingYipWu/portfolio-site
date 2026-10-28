@@ -1,39 +1,9 @@
 import { put, list } from '@vercel/blob';
 
-const SEED = [
-  {
-    id: 'iv-curve-tracer',
-    title: 'IV Curve Tracer Build',
-    description: 'Low-voltage Arduino-based IV curve tracer — a self-chosen build project to learn semiconductor device characterization hands-on. In progress.',
-    tags: ['Semiconductors', 'Arduino', 'Characterization'],
-    link: '',
-    imageUrl: ''
-  },
-  {
-    id: 'rf1-midterm-practice',
-    title: 'RF 1 Midterm Practice Website',
-    description: 'Interactive practice site built from past EE 401 exams: Learn, Smith Chart Lab, Quick Drills, Trace ID, Past Exam Problems, and Formula Sheet.',
-    tags: ['RF', 'EE 401', 'Web'],
-    link: '',
-    imageUrl: ''
-  },
-  {
-    id: 'ee467-quiz3-practice',
-    title: 'EE 467 Quiz 3 Practice Website',
-    description: 'Topic 3 inverters / SPWM learn-first lessons, Waveform Lab, Formula Sheet, interactive H-bridge Circuit Lab, and practice questions.',
-    tags: ['Power Electronics', 'EE 467', 'Web'],
-    link: '',
-    imageUrl: ''
-  },
-  {
-    id: 'semiconductor-learning',
-    title: 'Semiconductor Learning Website',
-    description: 'Interactive semiconductor learning pages: band diagrams, P–N junctions, threshold voltage, drift-layer tradeoffs, and β-Ga2O3 device stacks.',
-    tags: ['Semiconductors', 'Web'],
-    link: '',
-    imageUrl: ''
-  }
-];
+// No seed projects, per the owner's request (2026-10-28).
+// This portfolio shows only projects he uploads himself via /admin.html.
+// Stored projects in Blob, if any, are used; otherwise the list is empty.
+const SEED = [];
 
 async function readStored() {
   try {
