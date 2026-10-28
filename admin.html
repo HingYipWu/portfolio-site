@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Hing Yip Wu Portfolio</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="wrap">
+  <h1>Admin login</h1>
+  <p>Only Hing Yip can upload. Visitors see the public portfolio at <a href="/">home</a> — they never see this upload form unless they know the admin password.</p>
+  <p id="setup" style="display:none;color:#8a0000">Admin uploads are not set up yet: set the <code>ADMIN_PASSWORD</code> environment variable in Vercel (and link a Blob store) and redeploy. See README.md in the repo.</p>
+  <label>Admin password <input id="pw" type="password" autocomplete="current-password"></label>
+  <button id="loginBtn">Log in</button>
+  <p id="loginStatus"></p>
+  <form id="form" style="display:none">
+    <h2>Add a project</h2>
+    <label>Title <input id="title" required></label>
+    <label>Description <textarea id="description" rows="4" required></textarea></label>
+    <label>Tags (comma separated) <input id="tags"></label>
+    <label>Link (optional) <input id="link" type="url"></label>
+    <label>Image URL (optional, v1) <input id="imageUrl" type="url"></label>
+    <button type="submit">Upload project</button>
+    <p id="formStatus"></p>
+    <h3>Existing projects</h3>
+    <div id="existing"></div>
+  </form>
+  <script>
+    let pw = '';
+    document.getElementById('loginBtn').onclick = async () => {
+      pw = document.getElementById('pw').value;
+      const r = await fetch('/api/projects', { headers: { 'x-admin-password': pw } });
+      const d = await r.json();
+      if (d.adminConfigured === false) { document.getElementById('setup').style.display = 'block'; }
+      if (r.status === 401) { document.getElementById('loginStatus').textContent = 'Wrong password, or admin is not configured yet.'; return; }
+      document.getElementById('loginStatus').textContent = 'Logged in.';
+      document.getElementById('form').style.display = 'block';
+      document.getElementById('existing').innerHTML = (d.projects||[]).map(p => `<p><strong>${p.title}</strong> — ${p.description||''}</p>`).join('');
+    };
+    document.getElementById('form').onsubmit = async (e) => {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        tags: document.getElementById('tags').value,
+        link: document.getElementById('link').value,
+        imageUrl: document.getElementById('imageUrl').value
+      };
+      const r = await fetch('/api/projects', { method: 'POST', headers: { 'x-admin-password': pw, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const d = await r.json().catch(()=>({}));
+      document.getElementById('formStatus').textContent = r.ok ? 'Uploaded — it should now appear on the public home page.' : ('Upload failed: ' + (d.error || r.status));
+      if (r.ok) location.reload();
+    };
+  </script>
+</main>
+</body>
+</html>

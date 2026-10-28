@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hing Yip Wu — Portfolio</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="wrap">
+  <h1>Hing Yip Wu</h1>
+  <p class="sub">Electrical Engineering student, University at Buffalo — B.S. May 2027, M.S. May 2028</p>
+  <p>Semiconductor device characterization, RF/microwave circuits, and power electronics. Currently a Research Trainee in Dr. Singisetti's group (weekly mentored training in probing and IV characterization) and an Electrical Engineer Intern at Arora Engineers.</p>
+  <nav><a href="/admin.html">Admin login</a> · <a href="https://www.linkedin.com/in/hing-yip-wu-40b135279/">LinkedIn</a> · <a href="https://github.com/HingYipWu">GitHub</a></nav>
+</header>
+<main class="wrap">
+  <h2>Projects</h2>
+  <p id="status">Loading projects…</p>
+  <div id="projects" class="grid"></div>
+  <section>
+    <h2>About</h2>
+    <p>Experience, in his own framing: Singisetti Research Group — testing/characterization training (generic semiconductor samples, FET IV curves, linearity/ohmic properties). Arora Engineers — electrical site plans, power distribution layouts, and EV charging stations for USPS facilities, in AutoCAD/Revit. Wireless Network for Smart Systems Lab (Jan 2025–May 2026) — research assistant work under Dr. Filippo Malandra.</p>
+    <p>Skills: semiconductor characterization, IV tools, network analyzers, impedance analyzers, Keysight ADS, S-parameter simulations, RF/microwave circuits, power electronics, AutoCAD, Revit, Bluebeam.</p>
+  </section>
+</main>
+<script>
+async function load() {
+  const el = document.getElementById('projects');
+  const status = document.getElementById('status');
+  try {
+    const r = await fetch('/api/projects');
+    const data = await r.json();
+    const list = data.projects || [];
+    status.textContent = list.length ? '' : 'No projects yet.';
+    el.innerHTML = list.map(p => `
+      <article class="card">
+        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="">` : ''}
+        <h3>${escapeHtml(p.title || 'Untitled')}</h3>
+        <p>${escapeHtml(p.description || '')}</p>
+        ${p.tags ? `<p class="tags">${p.tags.map(escapeHtml).join(' · ')}</p>` : ''}
+        ${p.link ? `<p><a href="${p.link}" target="_blank" rel="noopener">View project →</a></p>` : ''}
+      </article>`).join('');
+  } catch (e) {
+    status.textContent = 'Could not load projects. Seed projects are listed below in the API fallback.';
+  }
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+load();
+</script>
+</body>
+</html>
