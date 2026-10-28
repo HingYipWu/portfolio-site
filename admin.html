@@ -20,7 +20,8 @@
     <label>Description <textarea id="description" rows="4" required></textarea></label>
     <label>Tags (comma separated) <input id="tags"></label>
     <label>Link (optional) <input id="link" type="url"></label>
-    <label>Image URL (optional, v1) <input id="imageUrl" type="url"></label>
+    <label>Image (optional, stored in the backend) <input id="imageFile" type="file" accept="image/*"></label>
+    <label>Or image URL (optional) <input id="imageUrl" type="url"></label>
     <button type="submit">Upload project</button>
     <p id="formStatus"></p>
     <h3>Existing projects</h3>
@@ -40,6 +41,7 @@
     };
     document.getElementById('form').onsubmit = async (e) => {
       e.preventDefault();
+      document.getElementById('formStatus').textContent = 'Uploading…';
       const payload = {
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,
@@ -47,6 +49,17 @@
         link: document.getElementById('link').value,
         imageUrl: document.getElementById('imageUrl').value
       };
+      const file = document.getElementById('imageFile').files[0];
+      if (file) {
+        payload.imageData = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        payload.imageName = file.name;
+        payload.imageUrl = '';
+      }
       const r = await fetch('/api/projects', { method: 'POST', headers: { 'x-admin-password': pw, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const d = await r.json().catch(()=>({}));
       document.getElementById('formStatus').textContent = r.ok ? 'Uploaded — it should now appear on the public home page.' : ('Upload failed: ' + (d.error || r.status));

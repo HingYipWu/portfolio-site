@@ -37,13 +37,26 @@ export default async function handler(req, res) {
     if (req.headers['x-admin-password'] !== process.env.ADMIN_PASSWORD) {
       return res.status(401).json({ error: 'unauthorized' });
     }
-    // v1 accepts JSON. Image upload as a file is a future iteration;
-    // for now the admin form sends an image URL, stored as imageUrl.
+    // Backend: JSON in, Blob out. The admin form sends an image either as
+    // imageUrl, or as a base64 data URL (imageData + imageName) which is
+    // decoded here and stored in Blob, so the public page can show it.
     let body = req.body || {};
     if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
     const title = String(body.title || '').trim();
     const description = String(body.description || '').trim();
     if (!title || !description) return res.status(400).json({ error: 'Title and description are required.' });
+    let imageUrl = String(body.imageUrl || '');
+    if (body.imageData && typeof body.imageData === 'string' && body.imageData.startsWith('data:')) {
+      const match = body.imageData.match(/^data:([^;]+);base64,(.+)$/);
+      if (match) {
+        const ext = (match[1].split('/')[1] || 'png').replace(/[^a-z0-9]/gi, '');
+        const safeName = String(body.imageName || 'image').replace(/[^a-zA-Z0-9._-]/g, '_');
+        const buf = Buffer.from(match[2], 'base64');
+        if (buf.length > 8 * 1024 * 1024) return res.status(413).json({ error: 'Image is too large (max 8 MB).' });
+        const uploaded = await put(`images/${Date.now()}-${safeName}.${ext}`, buf, { access: 'public', contentType: match[1] });
+        imageUrl = uploaded.url;
+      }
+    }
     const stored = await readStored();
     const projects = stored && Array.isArray(stored.projects) ? stored.projects : [...SEED];
     const project = {
@@ -52,7 +65,7 @@ export default async function handler(req, res) {
       description,
       tags: String(body.tags || '').split(',').map(s => s.trim()).filter(Boolean),
       link: String(body.link || ''),
-      imageUrl: String(body.imageUrl || '')
+      imageUrl
     };
     projects.unshift(project);
     try {
