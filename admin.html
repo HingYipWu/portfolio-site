@@ -90,7 +90,7 @@
       }
       const r = await fetch('/api/projects', { method: 'POST', headers: { 'x-admin-password': pw, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const d = await r.json().catch(()=>({}));
-      document.getElementById('formStatus').textContent = r.ok ? 'Uploaded — it should now appear on the public home page.' : ('Upload failed: ' + (d.error || r.status));
+      document.getElementById('formStatus').textContent = r.ok ? 'Uploaded — it should now appear on the public home page.' : ('Upload failed: ' + (d.error || r.status) + (d.detail ? ' — ' + d.detail : ''));
       if (r.ok) location.reload();
     };
   </script>
