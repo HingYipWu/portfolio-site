@@ -52,7 +52,7 @@ export default async function handler(req, res) {
     try {
       await saveStored(projects);
     } catch (e) {
-      return res.status(503).json({ error: 'Blob storage is not linked yet. Link a Blob store in Vercel and redeploy.' });
+      return res.status(503).json({ error: 'Blob storage is not linked yet. Link a Blob store in Vercel and redeploy.', detail: String(e && e.message ? e.message : e) });
     }
     return res.status(200).json({ projects });
   }
@@ -107,7 +107,7 @@ export default async function handler(req, res) {
     try {
       await put('projects.json', JSON.stringify({ projects }, null, 2), { access: 'public', addRandomSuffix: false });
     } catch (e) {
-      return res.status(503).json({ error: 'Blob storage is not linked yet. Link a Blob store in Vercel and redeploy.' });
+      return res.status(503).json({ error: 'Blob storage is not linked yet. Link a Blob store in Vercel and redeploy.', detail: String(e && e.message ? e.message : e) });
     }
     return res.status(201).json({ project });
   }
