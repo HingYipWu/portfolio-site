@@ -12,7 +12,7 @@
   <div class="wrap header-inner">
     <a class="logo" href="/">HY<span>.</span></a>
     <nav class="main-nav" aria-label="Main">
-      <a href="#projects">Projects</a>
+      <a href="/projects.html">Projects</a>
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
@@ -30,7 +30,7 @@
       <p class="hero-sub">Semiconductor, RF, and power</p>
       <p class="hero-body">B.S. Electrical Engineering, May 2027 · M.S. Electrical Engineering, May 2028 · Honors College</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#projects">View projects</a>
+        <a class="btn btn-primary" href="/projects.html">View projects</a>
         <a class="btn btn-secondary" href="https://www.linkedin.com/in/hing-yip-wu-40b135279/">LinkedIn</a>
       </div>
     </div>
@@ -52,7 +52,8 @@
     <h2>Projects</h2>
     <p class="section-intro">Personal projects I upload myself. No filler — only work I've actually built.</p>
     <p id="status">Loading projects…</p>
-    <div id="projects" class="grid"></div>
+    <ul id="projectList" class="project-list"></ul>
+    <p><a href="/projects.html">View all projects →</a></p>
   </section>
 
   <section id="about" class="wrap section section-alt">
@@ -107,8 +108,14 @@
 </footer>
 
 <script>
+function projectDate(p) {
+  // New projects carry createdAt; older ones encode their upload time in the id (base-36 ms timestamp).
+  const d = p.createdAt ? new Date(p.createdAt) : (p.id ? new Date(parseInt(p.id, 36)) : null);
+  if (!d || isNaN(d.getTime()) || d.getFullYear() < 2020) return '';
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
 async function load() {
-  const el = document.getElementById('projects');
+  const el = document.getElementById('projectList');
   const status = document.getElementById('status');
   try {
     const r = await fetch('/api/projects');
@@ -116,18 +123,13 @@ async function load() {
     const list = data.projects || [];
     if (!list.length) {
       status.textContent = '';
-      el.innerHTML = '<article class="card empty-card"><h3>No projects uploaded yet</h3><p>Check back soon — new personal projects will appear here as they are uploaded.</p></article>';
+      el.innerHTML = '<li>No projects uploaded yet — check back soon.</li>';
       return;
     }
     status.textContent = '';
+    // Home page: name + date only, no images or descriptions. Each name links to that project on the projects page.
     el.innerHTML = list.map(p => `
-      <article class="card">
-        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="">` : ''}
-        <h3>${escapeHtml(p.title || 'Untitled')}</h3>
-        <p>${escapeHtml(p.description || '')}</p>
-        ${p.tags ? `<p class="tags">${p.tags.map(escapeHtml).join(' · ')}</p>` : ''}
-        ${p.link ? `<p><a href="${p.link}" target="_blank" rel="noopener">View project →</a></p>` : ''}
-      </article>`).join('');
+      <li><a href="/projects.html#${escapeHtml(p.id || '')}">${escapeHtml(p.title || 'Untitled')}</a><span class="project-date">${escapeHtml(projectDate(p))}</span></li>`).join('');
   } catch (e) {
     status.textContent = 'Could not load projects right now.';
   }

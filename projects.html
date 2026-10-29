@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects — Hing Yip Wu</title>
+<meta name="description" content="Personal projects by Hing Yip Wu, Electrical Engineering student at the University at Buffalo.">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="/">HY<span>.</span></a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="/projects.html">Projects</a>
+      <a href="/#about">About</a>
+      <a href="/#experience">Experience</a>
+      <a href="/#skills">Skills</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+    <a class="admin-link" href="/admin.html">Admin</a>
+  </div>
+</header>
+<main class="wrap section">
+  <h1>Projects</h1>
+  <p class="section-intro">Personal projects I upload myself. No filler — only work I've actually built. <a href="/">← Back home</a></p>
+  <p id="status">Loading projects…</p>
+  <div id="projects" class="grid"></div>
+</main>
+<footer id="contact" class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <h2>Hing Yip Wu</h2>
+      <p>Electrical Engineering · University at Buffalo</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="https://www.linkedin.com/in/hing-yip-wu-40b135279/">LinkedIn</a>
+      <a href="mailto:hingyipwu@gmail.com">hingyipwu@gmail.com</a>
+      <a href="/admin.html">Admin login</a>
+    </nav>
+    <p class="footer-note">© 2026 Hing Yip Wu · Portfolio projects are uploaded by the owner only.</p>
+  </div>
+</footer>
+<script>
+function projectDate(p) {
+  const d = p.createdAt ? new Date(p.createdAt) : (p.id ? new Date(parseInt(p.id, 36)) : null);
+  if (!d || isNaN(d.getTime()) || d.getFullYear() < 2020) return '';
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+async function load() {
+  const el = document.getElementById('projects');
+  const status = document.getElementById('status');
+  try {
+    const r = await fetch('/api/projects');
+    const data = await r.json();
+    const list = data.projects || [];
+    if (!list.length) {
+      status.textContent = '';
+      el.innerHTML = '<article class="card empty-card"><h3>No projects uploaded yet</h3><p>Check back soon — new personal projects will appear here as they are uploaded.</p></article>';
+      return;
+    }
+    status.textContent = '';
+    el.innerHTML = list.map(p => `
+      <article class="card project-card" id="${escapeHtml(p.id || '')}">
+        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="">` : ''}
+        <h3>${escapeHtml(p.title || 'Untitled')}</h3>
+        <p class="meta">${escapeHtml(projectDate(p))}</p>
+        <p>${escapeHtml(p.description || '')}</p>
+        ${p.tags && p.tags.length ? `<p class="tags">${p.tags.map(escapeHtml).join(' · ')}</p>` : ''}
+        ${p.link ? `<p><a href="${p.link}" target="_blank" rel="noopener">View project →</a></p>` : ''}
+      </article>`).join('');
+  } catch (e) {
+    status.textContent = 'Could not load projects right now.';
+  }
+}
+load();
+</script>
+</body>
+</html>

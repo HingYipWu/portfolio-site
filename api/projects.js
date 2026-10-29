@@ -97,6 +97,7 @@ export default async function handler(req, res) {
     const projects = stored && Array.isArray(stored.projects) ? stored.projects : [...SEED];
     const project = {
       id: Date.now().toString(36),
+      createdAt: new Date().toISOString(),
       title,
       description,
       tags: String(body.tags || '').split(',').map(s => s.trim()).filter(Boolean),
