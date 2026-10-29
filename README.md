@@ -30,5 +30,5 @@ this scale — Blob is the free database for this site.
 
 - `index.html` — public portfolio
 - `admin.html` — admin login + upload form
-- `api/projects.js` — GET public projects, POST new project (admin password required, Blob-backed)
+- `api/projects.js` — GET public projects, POST new project, DELETE a project, PATCH to move a project up/down (all admin actions require the admin password, Blob-backed)
 - `styles.css` — shared styling

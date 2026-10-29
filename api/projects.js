@@ -18,8 +18,44 @@ async function readStored() {
   }
 }
 
+async function saveStored(projects) {
+  await put('projects.json', JSON.stringify({ projects }, null, 2), { access: 'public', addRandomSuffix: false });
+}
+
 export default async function handler(req, res) {
   const adminConfigured = Boolean(process.env.ADMIN_PASSWORD);
+  // Admin-only actions: delete a project, and move a project up/down.
+  // Both require the admin password header and rewrite projects.json in Blob,
+  // so the public page order/content changes immediately, no redeploy needed.
+  if (req.method === 'DELETE' || req.method === 'PATCH') {
+    if (!adminConfigured) return res.status(503).json({ error: 'Admin password not configured. Set ADMIN_PASSWORD in Vercel.' });
+    if (req.headers['x-admin-password'] !== process.env.ADMIN_PASSWORD) {
+      return res.status(401).json({ error: 'unauthorized' });
+    }
+    const stored = await readStored();
+    let projects = stored && Array.isArray(stored.projects) ? stored.projects : [...SEED];
+    if (req.method === 'DELETE') {
+      const id = String(req.query.id || '');
+      const before = projects.length;
+      projects = projects.filter(p => String(p.id) !== id);
+      if (projects.length === before) return res.status(404).json({ error: 'Project not found.' });
+    } else {
+      let body = req.body || {};
+      if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
+      const id = String(body.id || '');
+      const direction = body.direction === 'down' ? 1 : -1;
+      const idx = projects.findIndex(p => String(p.id) === id);
+      const swap = idx + direction;
+      if (idx < 0 || swap < 0 || swap >= projects.length) return res.status(400).json({ error: 'Cannot move that project further.' });
+      [projects[idx], projects[swap]] = [projects[swap], projects[idx]];
+    }
+    try {
+      await saveStored(projects);
+    } catch (e) {
+      return res.status(503).json({ error: 'Blob storage is not linked yet. Link a Blob store in Vercel and redeploy.' });
+    }
+    return res.status(200).json({ projects });
+  }
   if (req.method === 'GET') {
     const stored = await readStored();
     const projects = stored && Array.isArray(stored.projects) ? stored.projects : SEED;

@@ -32,10 +32,31 @@
     <button type="submit">Upload project</button>
     <p id="formStatus"></p>
     <h3>Existing projects</h3>
+    <p>Use ↑ / ↓ to reorder how projects appear on the public page, top first. Delete removes a project immediately.</p>
     <div id="existing"></div>
   </form>
   <script>
     let pw = '';
+    function renderExisting(list) {
+      document.getElementById('existing').innerHTML = (list||[]).map(p => `
+        <div class="card" style="margin-bottom:12px">
+          <strong>${p.title}</strong> — ${p.description||''}<br>
+          <button type="button" onclick="window.moveProject('${p.id}','up')">↑ Move up</button>
+          <button type="button" onclick="window.moveProject('${p.id}','down')">↓ Move down</button>
+          <button type="button" onclick="window.deleteProject('${p.id}','${(p.title||'').replace(/'/g,'')}')">Delete</button>
+        </div>`).join('') || '<p>No projects yet.</p>';
+    }
+    window.moveProject = async (id, direction) => {
+      const r = await fetch('/api/projects', { method: 'PATCH', headers: { 'x-admin-password': pw, 'Content-Type': 'application/json' }, body: JSON.stringify({ id, direction }) });
+      const d = await r.json().catch(()=>({}));
+      if (r.ok) renderExisting(d.projects); else alert('Move failed: ' + (d.error || r.status));
+    };
+    window.deleteProject = async (id, title) => {
+      if (!confirm('Delete "' + title + '"? This cannot be undone from the admin page.')) return;
+      const r = await fetch('/api/projects?id=' + encodeURIComponent(id), { method: 'DELETE', headers: { 'x-admin-password': pw } });
+      const d = await r.json().catch(()=>({}));
+      if (r.ok) renderExisting(d.projects); else alert('Delete failed: ' + (d.error || r.status));
+    };
     document.getElementById('loginBtn').onclick = async () => {
       pw = document.getElementById('pw').value;
       const r = await fetch('/api/projects', { headers: { 'x-admin-password': pw } });
@@ -44,7 +65,7 @@
       if (r.status === 401) { document.getElementById('loginStatus').textContent = 'Wrong password, or admin is not configured yet.'; return; }
       document.getElementById('loginStatus').textContent = 'Logged in.';
       document.getElementById('form').style.display = 'block';
-      document.getElementById('existing').innerHTML = (d.projects||[]).map(p => `<p><strong>${p.title}</strong> — ${p.description||''}</p>`).join('');
+      renderExisting(d.projects);
     };
     document.getElementById('form').onsubmit = async (e) => {
       e.preventDefault();
